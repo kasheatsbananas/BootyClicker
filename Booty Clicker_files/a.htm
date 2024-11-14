@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html w-tid="0"><head w-tid="1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><style>html{min-height:100%}.ctxmenu{position:fixed;border:1px solid #999;padding:2px 0;box-shadow:#aaa 3px 3px 3px;background:#fff;margin:0;z-index:9999;overflow-y:auto;font:15px Verdana, sans-serif;box-sizing:border-box}.ctxmenu li{margin:1px 0;display:block;position:relative;user-select:none}.ctxmenu li.heading{font-weight:bold;margin-left:-5px}.ctxmenu li span{display:block;padding:2px 20px;cursor:default}.ctxmenu li a{color:inherit;text-decoration:none}.ctxmenu li.icon{padding-left:15px}.ctxmenu img.icon{position:absolute;width:18px;left:10px;top:2px}.ctxmenu li.disabled{color:#ccc}.ctxmenu li.divider{border-bottom:1px solid #aaa;margin:5px 0}.ctxmenu li.interactive:hover{background:rgba(0, 0, 0, .1)}.ctxmenu li.submenu::after{content:"";position:absolute;display:block;top:0;bottom:0;right:.4em;margin:auto .1rem auto auto;border-right:1px solid #000;border-top:1px solid #000;transform:rotate(45deg);width:.3rem;height:.3rem}.ctxmenu li.submenu.disabled::after{border-color:#ccc}</style><!-- base href="https://ddyp868yvb3jyueytqug.content.websim.ai/?v=22&__websim_origin=https%3A%2F%2Fwebsim.ai" -->
+<link rel="stylesheet" href="a_data/fonts.css">
+<link rel="stylesheet" href="a_data/ctxmenu.css">
+
+
+<title w-tid="3">Booty Clicker</title>
+<style w-tid="4">
+body {
+    background: linear-gradient(45deg, #ff69b4, #ff1493);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Comic Sans MS', cursive;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.youtube-link {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.2s;
+    z-index: 1000;
+}
+
+.youtube-link:hover {
+    transform: scale(1.1);
+}
+
+.youtube-link svg {
+    width: 100%;
+    height: 100%;
+    fill: white;
+}
+
+#booty {
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#booty:active {
+    transform: scale(0.95);
+}
+
+.stats {
+    font-size: 24px;
+    margin: 20px;
+    background: rgba(255,255,255,0.2);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.upgrade {
+    background: rgba(255,20,147,0.6);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: transform 0.2s;
+}
+
+.upgrade:hover {
+    transform: scale(1.1);
+    background: rgba(255,20,147,0.8);
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+.floating-text {
+    position: absolute;
+    animation: bounce 1s ease-out;
+    opacity: 0;
+    transition: opacity 1s;
+    font-size: 20px;
+    pointer-events: none;
+}
+
+.achievement {
+    position: fixed;
+    top: 20px;
+    right: -300px;
+    background: rgba(255,182,193,0.9);
+    padding: 15px;
+    border-radius: 10px;
+    transition: right 0.5s;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.achievement.show {
+    right: 20px;
+}
+
+#progressSidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background: rgba(255,182,193,0.9);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.progress-item {
+    margin: 10px 0;
+    padding: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: rgba(255,20,147,0.8);
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.producer-container {
+    background: rgba(255,255,255,0.2);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+.producer-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.ice-spice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.ice-spice-icon {
+    font-size: 24px;
+}
+
+@keyframes bootyParticleFall {
+    0% { 
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+    }
+    100% { 
+        transform: translateY(100vh) rotate(var(--rot));
+        opacity: 0;
+    }
+}
+
+.booty-particle {
+    position: fixed;
+    top: 0;
+    pointer-events: none;
+    font-size: 20px;
+    animation: bootyParticleFall 2s linear forwards;
+    z-index: 1000;
+}
+
+#achievementsList > div {
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+#achievementsList > div:hover {
+    transform: scale(1.02);
+    background: rgba(255,255,255,0.3) !important;
+}
+</style>
+</head><body w-tid="5">
+<a href="https://youtube.com/@krazy0." class="youtube-link" target="_blank" rel="noopener noreferrer" w-tid="6">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w-tid="7">
+        <path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z" w-tid="8"></path>
+    </svg>
+</a>
+<h1 w-tid="9">🍑 Booty Clicker 🍑</h1>
+<div class="stats" w-tid="10">Booties: <span id="score" w-tid="11">1</span></div>
+<div class="stats" w-tid="12">Booties per second: <span id="bps" w-tid="13">0.0</span></div>
+
+<svg id="booty" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" w-tid="14">
+    <!-- Left cheek -->
+    <circle cx="40" cy="50" r="20" fill="#FFC0CB" stroke="#FF69B4" stroke-width="2" w-tid="15">
+        <animate attributeName="cy" dur="2s" repeatCount="indefinite" values="50;48;50" calcMode="ease-in-out" w-tid="16"></animate>
+    </circle>
+    
+    <!-- Right cheek -->
+    <circle cx="60" cy="50" r="20" fill="#FFC0CB" stroke="#FF69B4" stroke-width="2" w-tid="17">
+        <animate attributeName="cy" dur="2s" repeatCount="indefinite" values="50;52;50" calcMode="ease-in-out" w-tid="18"></animate>
+    </circle>
+    
+    <!-- Line between cheeks -->
+    <path d="M40,50 Q50,50 60,50" fill="none" stroke="#FF69B4" stroke-width="2" opacity="0.5" w-tid="19">
+        <animate attributeName="d" dur="2s" repeatCount="indefinite" values="M40,50 Q50,50 60,50;
+                        M40,48 Q50,50 60,52;
+                        M40,50 Q50,50 60,50" w-tid="20"></animate>
+    </path>
+</svg>
+
+<button class="upgrade" id="autoClicker" w-tid="21">
+    Buy Auto Clicker (Cost: 10 booties)
+</button>
+<button class="upgrade" id="bootyMultiplier" w-tid="22">
+    Buy Booty Multiplier (Cost: 50 booties)
+</button>
+<button class="upgrade" id="bootyRain" w-tid="23">
+    Buy Booty Rain (Cost: 100 booties)
+</button>
+<button class="upgrade" id="goldenBooty" w-tid="24">
+    Buy Golden Booty Chance (Cost: 200 booties)
+</button>
+<button class="upgrade" id="bootyFactory" w-tid="25">
+    Buy Booty Factory (Cost: 1000 booties)
+</button>
+<button class="upgrade" id="bootyMine" w-tid="26">
+    Buy Booty Mine (Cost: 5000 booties)
+</button>
+<button class="upgrade" id="bootyBank" w-tid="27">
+    Buy Booty Bank (Interest: 1% per minute) (Cost: 2500 booties)
+</button>
+
+<div id="progressSidebar" w-tid="28">
+    <h3 w-tid="29">Progress</h3>
+    <div class="producer-container" w-tid="30">
+        <div class="ice-spice" w-tid="31">
+            <span class="ice-spice-icon" w-tid="32">👩‍🦰</span>
+            <div w-tid="33">
+                <h4 w-tid="34">Ice Spice</h4>
+                <p w-tid="35">Owned: <span id="iceSpiceCount" w-tid="36">0</span></p>
+            </div>
+        </div>
+        <button class="upgrade" id="hireIceSpice" w-tid="37">
+            Hire Ice Spice (Cost: 300 booties)
+        </button>
+        <div w-tid="38">Production: +100 booties every 10 seconds each</div>
+    </div>
+    <div class="progress-item" w-tid="39">
+        <div w-tid="40">Next Achievement Progress</div>
+        <div class="progress-bar" w-tid="41">
+            <div class="progress-fill" id="achievementProgress" w-tid="42"></div>
+        </div>
+    </div>
+    <div class="progress-item" w-tid="43">
+        <div w-tid="44">Total Production</div>
+        <div id="productionBreakdown" w-tid="45">
+        <div>Auto Clickers: 0.0/sec</div>
+        <div>Ice Spice: 0.0/sec (0 per 10s)</div>
+        <div>Factories: 0.0/sec</div>
+        <div>Mines: 0.0/sec</div>
+        <div>Total: 0.0/sec</div>
+    </div>
+    </div>
+    <h3 w-tid="46">Achievements</h3>
+    <div id="achievementsList" w-tid="47">
+            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 5px;">
+                <div>❌ Booty Beginner</div>
+                <div style="font-size: 0.9em; opacity: 0.8;">Click 50 times</div>
+                <div style="font-size: 0.8em; margin-top: 5px;">Progress: 1/50 clicks</div>
+            </div>
+        
+            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 5px;">
+                <div>❌ Booty Master</div>
+                <div style="font-size: 0.9em; opacity: 0.8;">Reach 1000 booties</div>
+                <div style="font-size: 0.8em; margin-top: 5px;">Progress: 1/1000 booties</div>
+            </div>
+        
+            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 5px;">
+                <div>❌ Rainmaker</div>
+                <div style="font-size: 0.9em; opacity: 0.8;">Trigger booty rain</div>
+                <div style="font-size: 0.8em; margin-top: 5px;">Progress: Not yet triggered</div>
+            </div>
+        
+            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 5px;">
+                <div>❌ Golden Touch</div>
+                <div style="font-size: 0.9em; opacity: 0.8;">Find a golden booty</div>
+                <div style="font-size: 0.8em; margin-top: 5px;">Progress: Keep clicking!</div>
+            </div>
+        </div>
+</div>
+
+<script w-tid="48">
+let score = 0;
+let autoClickerCost = 10;
+let multiplierCost = 50;
+let bootyRainCost = 100;
+let goldenBootyCost = 200;
+let iceSpiceCost = 300;
+let factoryCost = 1000;
+let mineCost = 5000;
+let bankCost = 2500;
+let autoClickers = 0;
+let iceSpices = 0;
+let factories = 0;
+let mines = 0;
+let multiplier = 1;
+let bps = 0;
+let hasGoldenBootyChance = false;
+let hasBank = false;
+let clickCount = 0;
+
+let achievements = {
+    bootybeginner: { 
+        name: "Booty Beginner", 
+        desc: "Click 50 times", 
+        earned: false,
+        getProgress: () => `${clickCount}/50 clicks`
+    },
+    bootymaster: { 
+        name: "Booty Master", 
+        desc: "Reach 1000 booties", 
+        earned: false,
+        getProgress: () => `${Math.floor(score)}/1000 booties`
+    },
+    rainmaker: { 
+        name: "Rainmaker", 
+        desc: "Trigger booty rain", 
+        earned: false,
+        getProgress: () => achievements.rainmaker.earned ? "Complete!" : "Not yet triggered"
+    },
+    golden: { 
+        name: "Golden Touch", 
+        desc: "Find a golden booty", 
+        earned: false,
+        getProgress: () => achievements.golden.earned ? "Complete!" : "Keep clicking!"
+    }
+};
+
+const scoreElement = document.getElementById('score');
+const bpsElement = document.getElementById('bps');
+const booty = document.getElementById('booty');
+const autoClickerButton = document.getElementById('autoClicker');
+const multiplierButton = document.getElementById('bootyMultiplier');
+
+function updateScore() {
+    scoreElement.textContent = Math.floor(score);
+    bps = autoClickers * multiplier + factories * 50 * multiplier + mines * 200 * multiplier; // Update bps calculation
+    bpsElement.textContent = bps.toFixed(1);
+    updateProductionBreakdown();
+}
+
+function createFloatingText(x, y, text) {
+    const element = document.createElement('div');
+    element.className = 'floating-text';
+    element.style.left = x + 'px';
+    element.style.top = y + 'px';
+    element.textContent = text;
+    document.body.appendChild(element);
+    
+    setTimeout(() => element.remove(), 1000);
+}
+
+function showAchievement(name) {
+    const ach = document.createElement('div');
+    ach.className = 'achievement';
+    ach.innerHTML = `🏆 Achievement Unlocked: ${name}`;
+    document.body.appendChild(ach);
+    setTimeout(() => ach.classList.add('show'), 100);
+    setTimeout(() => ach.remove(), 3000);
+}
+
+function updateAchievements() {
+    const list = document.getElementById('achievementsList');
+    list.innerHTML = '';
+    for (let id in achievements) {
+        const ach = achievements[id];
+        const progress = ach.getProgress();
+        
+        list.innerHTML += `
+            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 5px;">
+                <div>${ach.earned ? '✅' : '❌'} ${ach.name}</div>
+                <div style="font-size: 0.9em; opacity: 0.8;">${ach.desc}</div>
+                <div style="font-size: 0.8em; margin-top: 5px;">Progress: ${progress}</div>
+            </div>
+        `;
+    }
+}
+
+function checkAchievements() {
+    if (!achievements.bootybeginner.earned && clickCount >= 50) {
+        achievements.bootybeginner.earned = true;
+        showAchievement("Booty Beginner");
+    }
+    if (!achievements.bootymaster.earned && score >= 1000) {
+        achievements.bootymaster.earned = true;
+        showAchievement("Booty Master");
+    }
+    updateAchievements();
+}
+
+booty.addEventListener('click', (e) => {
+    // Create multiple falling booties
+    for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'booty-particle';
+        particle.textContent = '🍑';
+        
+        const randomX = Math.random() * window.innerWidth;
+        particle.style.left = randomX + 'px';
+        
+        const rot = (Math.random() - 0.5) * 360;
+        particle.style.setProperty('--rot', `${rot}deg`);
+        
+        document.body.appendChild(particle);
+        
+        setTimeout(() => particle.remove(), 2000);
+    }
+    
+    clickCount++;
+    checkAchievements();
+    score += multiplier;
+    updateScore();
+    
+    createFloatingText(
+        e.clientX,
+        e.clientY,
+        `+${multiplier}`
+    );
+
+    if (hasGoldenBootyChance && Math.random() < 0.05) {
+        score += multiplier * 100;
+        createFloatingText(
+            booty.getBoundingClientRect().left,
+            booty.getBoundingClientRect().top,
+            "✨ GOLDEN BOOTY! ✨"
+        );
+        if (!achievements.golden.earned) {
+            achievements.golden.earned = true;
+            showAchievement("Golden Touch");
+        }
+    }
+});
+
+autoClickerButton.addEventListener('click', () => {
+    if (score >= autoClickerCost) {
+        score -= autoClickerCost;
+        autoClickers++;
+        bps += multiplier;
+        autoClickerCost = Math.ceil(autoClickerCost * 1.2);
+        autoClickerButton.textContent = `Buy Auto Clicker (Cost: ${autoClickerCost} booties)`;
+        updateScore();
+    }
+});
+
+multiplierButton.addEventListener('click', () => {
+    if (score >= multiplierCost) {
+        score -= multiplierCost;
+        multiplier *= 2;
+        bps = autoClickers * multiplier;
+        multiplierCost = Math.ceil(multiplierCost * 3);
+        multiplierButton.textContent = `Buy Booty Multiplier (Cost: ${multiplierCost} booties)`;
+        updateScore();
+    }
+});
+
+document.getElementById('bootyRain').onclick = () => {
+    if (score >= bootyRainCost) {
+        score -= bootyRainCost;
+        bootyRainCost = Math.ceil(bootyRainCost * 1.5);
+        document.getElementById('bootyRain').textContent = `Buy Booty Rain (Cost: ${bootyRainCost} booties)`;
+        makeBootyRain();
+        if (!achievements.rainmaker.earned) {
+            achievements.rainmaker.earned = true;
+            showAchievement("Rainmaker");
+        }
+        updateScore();
+    }
+};
+
+document.getElementById('goldenBooty').onclick = () => {
+    if (score >= goldenBootyCost) {
+        score -= goldenBootyCost;
+        goldenBootyCost = Math.ceil(goldenBootyCost * 2);
+        document.getElementById('goldenBooty').textContent = `Buy Golden Booty Chance (Cost: ${goldenBootyCost} booties)`;
+        hasGoldenBootyChance = true;
+        updateScore();
+    }
+};
+
+document.getElementById('hireIceSpice').onclick = () => {
+    if (score >= iceSpiceCost) {
+        score -= iceSpiceCost;
+        iceSpices++;
+        iceSpiceCost = Math.ceil(iceSpiceCost * 1.15);
+        document.getElementById('hireIceSpice').textContent = `Hire Ice Spice (Cost: ${iceSpiceCost} booties)`;
+        document.getElementById('iceSpiceCount').textContent = iceSpices;
+        updateScore();
+    }
+};
+
+document.getElementById('bootyFactory').onclick = () => {
+    if (score >= factoryCost) {
+        score -= factoryCost;
+        factories++;
+        factoryCost = Math.ceil(factoryCost * 1.3);
+        document.getElementById('bootyFactory').textContent = `Buy Booty Factory (Cost: ${factoryCost} booties)`;
+        updateScore();
+        updateProductionBreakdown();
+    }
+};
+
+document.getElementById('bootyMine').onclick = () => {
+    if (score >= mineCost) {
+        score -= mineCost;
+        mines++;
+        mineCost = Math.ceil(mineCost * 1.4);
+        document.getElementById('bootyMine').textContent = `Buy Booty Mine (Cost: ${mineCost} booties)`;
+        updateScore();
+        updateProductionBreakdown();
+    }
+};
+
+document.getElementById('bootyBank').onclick = () => {
+    if (score >= bankCost && !hasBank) {
+        score -= bankCost;
+        hasBank = true;
+        document.getElementById('bootyBank').style.display = 'none';
+        updateScore();
+    }
+};
+
+setInterval(() => {
+    score += bps / 10;
+    score += (factories * 50 * multiplier) / 10;
+    score += (mines * 200 * multiplier) / 10;
+    if (hasBank) {
+        score *= 1.001; // 1% interest per minute = 0.1% per 6 seconds
+    }
+    updateScore();
+}, 100);
+
+setInterval(() => {
+    if (iceSpices > 0) {
+        score += (iceSpices * 100) * multiplier;
+        updateScore();
+    }
+}, 10000);
+
+function makeBootyRain() {
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const booty = document.createElement('div');
+            booty.className = 'bootyRain';
+            booty.textContent = '🍑';
+            booty.style.left = Math.random() * window.innerWidth + 'px';
+            document.body.appendChild(booty);
+            setTimeout(() => booty.remove(), 3000);
+        }, i * 200);
+    }
+}
+
+function updateProductionBreakdown() {
+    const breakdown = document.getElementById('productionBreakdown');
+    const factoryProduction = factories * 50 * multiplier;
+    const mineProduction = mines * 200 * multiplier;
+    
+    breakdown.innerHTML = `
+        <div>Auto Clickers: ${(autoClickers * multiplier).toFixed(1)}/sec</div>
+        <div>Ice Spice: ${(iceSpices * 100 * multiplier / 10).toFixed(1)}/sec (${iceSpices * 100 * multiplier} per 10s)</div>
+        <div>Factories: ${factoryProduction.toFixed(1)}/sec</div>
+        <div>Mines: ${mineProduction.toFixed(1)}/sec</div>
+        <div>Total: ${(bps + factoryProduction + mineProduction).toFixed(1)}/sec</div>
+    `;
+}
+
+function updateProgressBar() {
+    const progressFill = document.getElementById('achievementProgress');
+    if (!achievements.bootybeginner.earned) {
+        progressFill.style.width = (clickCount / 50 * 100) + '%';
+    } else if (!achievements.bootymaster.earned) {
+        progressFill.style.width = (score / 1000 * 100) + '%';
+    } else {
+        progressFill.style.width = '100%';
+    }
+}
+
+setInterval(() => {
+    updateAchievements();
+}, 1000);
+
+updateAchievements();
+updateProductionBreakdown();
+</script>
+</body></html>
